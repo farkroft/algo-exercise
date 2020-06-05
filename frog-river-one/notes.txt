@@ -1,0 +1,24 @@
+correctness := 33%
+performance := 0%
+taskScore := 18%
+===================================================================
+func earliestTime(arr []int, dest int) int {
+    result := false
+    timeArrive := 0
+    output := 0
+    for i := range arr {
+        if arr[i] == dest {
+            result = true
+            timeArrive = i
+        }
+    }
+
+    if result == true {
+        output = timeArrive
+    } else {
+        output = -1
+    }
+    return output
+}
+===================================================================
+

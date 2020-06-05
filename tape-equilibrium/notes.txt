@@ -1,0 +1,142 @@
+math.Abs(float64) bisa diganti dengan XOR int + 1
+misal math.Abs(-7) bisa diganti dengan ^-7 + 1
+binary -7 = -111
+XOR dari -111 adalah 110, ditambah 1 = 111 atau 7 decimal
+
+31243 penjumlahan dari kanan ke kiri = total jumlah dari kiri ke kanan - current index
+
+karena jawabannya bisa 0, maka untuk menghindari 0 itu assign dari operasi atau nilai default int
+maka result pertama di assign dengan biggest possible integer dari sum positif index
+
+=========== time complexity O(N * (O(N) + O(N))) + O(N) =================================
+=========================================================================================
+func tapeEquilibrium(arr []int) int {
+	tempArr := []int{}
+	arr1, arr2 := splitArr(arr)
+	done := false
+	k := 0
+	for !done {
+		done = true
+		sumA := 0
+		sumB := 0
+		for i := 0; i <= k; i++ {
+			sumA = sumA + arr1[i]
+		}
+		if k != len(arr1)-1 {
+			k++
+		}
+
+		for i := len(arr2) - 1; i >= 0; i-- {
+			sumB = sumB + arr2[i]
+		}
+
+		if len(arr2) > 1 {
+			arr2 = remove(arr2, 0)
+			done = false
+		}
+		tempArr = append(tempArr, int(math.Abs(float64(sumA-sumB))))
+	}
+
+	return min(tempArr)
+}
+
+func min(arr []int) int {
+	min := 0
+	if len(arr) > 1 {
+		min = arr[0]
+		for i := range arr {
+			if min > arr[i] {
+				min = arr[i]
+			}
+		}
+	}
+
+	return min
+}
+
+func splitArr(arr []int) ([]int, []int) {
+	A := make([]int, len(arr))
+	B := make([]int, len(arr))
+	copy(A, arr)
+	copy(B, arr)
+	A = A[:len(A)-1]
+	B = append(B[:0], B[1:]...)
+	return A, B
+}
+
+func remove(arr []int, i int) []int {
+	return append(arr[:i], arr[i+1:]...)
+}
+=========================================================================================
+
+======================= time complexity O(N * P) + O(N) =================================
+=========================================================================================
+done := false
+tempArr := []int{}
+breakPoint := 0
+
+for !done {
+    sumA := 0
+    sumB := 0
+    for i := range arr {
+        if i > breakPoint {
+            sumB = sumB + arr[i]
+        } else {
+            sumA = sumA + arr[i]
+        }
+    }
+
+    if breakPoint == len(arr)-1 {
+        done = true
+    }
+    breakPoint++
+    tempArr = append(tempArr, int(math.Abs(float64(sumA-sumB))))
+}
+
+return min(tempArr)
+
+func min(arr []int) int {
+	min := 0
+	if len(arr) > 1 {
+		min = arr[0]
+		for i := range arr {
+			if min > arr[i] {
+				min = arr[i]
+			}
+		}
+	}
+
+	return min
+}
+=========================================================================================
+
+======================= time complexity O(N) + O(N) =====================================
+=========================================================================================
+var result, totalSum, currentSum int
+	arrSum := []int{}
+
+	for i := range arr {
+		totalSum += arr[i]
+		arrSum = append(arrSum, totalSum)
+
+		if arr[i] < 0 {
+			result = result + ^arr[i] + 1
+		} else {
+			result = result + arr[i]
+		}
+	}
+
+	for i := 0; i < len(arr)-1; i++ {
+		currentSum += arr[i]
+		currentResult := currentSum - (totalSum - currentSum)
+		if currentResult < 0 {
+			currentResult = ^currentResult + 1
+		}
+
+		if currentResult < result {
+			result = currentResult
+		}
+	}
+
+	return result
+=========================================================================================
