@@ -10,7 +10,6 @@ func main() {
 	// 1, 3, 5, 2, 4, 6, 7
 	swapped := minimumSwap(arr)
 	fmt.Println(swapped)
-
 }
 
 // i   arr                         swap (indices)
